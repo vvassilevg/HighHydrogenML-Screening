@@ -12,6 +12,7 @@ API.txt must contain the API key for using Materials Project within Python scrip
 Dataset.pickle is an already existing dataset file in which the user wants to append new entries for the dataset. Optional
 
 **RandomForest.py** 
+
 Train a Random Forest model for the prediction of adsorption energies. The dataset must be in xlsx format and the descriptor values must be already scaled using a MinMax scheme (see Zenodo repository https://zenodo.org/doi/10.5281/zenodo.10364546 for available datasets)
 
 Usage:
