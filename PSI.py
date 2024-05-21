@@ -1,22 +1,20 @@
+######################################################################################################
+#Code written by Valentin Vassilev-Galindo & Carmen Martínez-Alonso
+"""
+Copyright 2024 Valentin Vassilev-Galindo & Carmen Martínez-Alonso
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+"""
+
+#####################################################################################################
+
 from mendeleev import element
 from mendeleev.fetch import fetch_table
 from ase import Atoms
 import numpy as np
-
-#YOU NEED TO INCLUDE THE OUTER ELECTRONS OF A AND B, THE ELECTRONEGATIVITY OF A AND B, THE ESTEQUIOMETRY, GEOMETRY AND ADSORPTION SITE
-
-#OUTER ELECTRONS
-#outereA_zero= 12
-#outereB_zero= 5
-
-#ELECTRONEGATIVITY (Pauli)
-#engA_zero= 1.65
-#engB_zero= 1.6
-
-#estequiom= 'A2B'   #options: A3B, AB, A (pure), A2B
-#geom= 'hcp'       #options: fcc, bcc, hcp
-#site= 'fccAAB_2'    #options: fcc, hcp, ontop, fccAAA, fccAAB, fccABB, hcpAAA, hcpAAB, hcpABB ontopA, ontopB, shortbridge, longbridgeAA, longbridgeBB, threefoldAAB, threefoldABB, hcpAAA_A, hcpAAA_B, fccAAB_1, fccAAB_2.
-
 
 df_elements = fetch_table('elements')
 
@@ -44,12 +42,6 @@ missing_eng_pauling = {#2 He n
 
 def get_psi(sample_info, features, formula_ok = False):
 
- #DO NOT CHANGE ANYTHING BELOW THIS LINE
- #--------------------------------------------------------------------------------------------
-
- #proportions of A and B depending on stoichiometry and adsorption site
- #n es átomos en total (A+B)
-
  PGtogeom = {'Fm-3m' : 'fcc', 'Im-3m' : 'bcc', 'P6_3/mmc' : 'hcp'}
 
 
@@ -59,14 +51,6 @@ def get_psi(sample_info, features, formula_ok = False):
          letter = name[-1]
          outere_zero_dict['outere'+letter+'_zero'] = features[name]
 
- print('outer e Dict for PSI:')
- print(outere_zero_dict)
- print()
-
- #outereA_zero = features['out_eA']
- #outereB_zero = features['out_eB']
- 
-
  if formula_ok:
      formula = sample_info['system']
  else:
@@ -74,8 +58,6 @@ def get_psi(sample_info, features, formula_ok = False):
 
  atoms = Atoms(formula)
  numbers = list(atoms.get_atomic_numbers())
- #print(formula, numbers)
- #print()
  n_elements = np.unique(numbers).shape[0]
 
  letters_dict = {0 : 'A', 1 : 'B', 2 : 'C', 3 : 'D'}
@@ -92,28 +74,13 @@ def get_psi(sample_info, features, formula_ok = False):
 
          eng_zero_dict['eng'+letter+'_zero'] = eng_tmp
 
-         #print(i, n)
-         #if i == 0:
-         #    engA_zero = df_elements[df_elements['atomic_number'] == n]['en_pauling'].values[0]
-         #    if np.isnan(engA_zero):
-         #        engA_zero = missing_eng_pauling[str(n)]
-         #if i == 1:
-         #    engB_zero = df_elements[df_elements['atomic_number'] == n]['en_pauling'].values[0]
-         #    if np.isnan(engB_zero):
-         #        engB_zero = missing_eng_pauling[str(n)]
          Done.append(n)
          i += 1
          if i == n_elements:
              break
 
- print('Eng dict for PSI:')
- print(eng_zero_dict)
- print()
-
  if sample_info['Type'] == 'Pure':
-     #engB_zero = engA_zero
      eng_zero_dict['engB_zero'] = eng_zero_dict['engA_zero']
-     #eng_zero_dict['engC_zero'] = eng_zero_dict['engA_zero'] #NEEDED IF DATASET INCLUDES TRIMETALIC
      estequiom = 'A'
      geom = PGtogeom[sample_info['Point_group']]
  else:
@@ -124,8 +91,6 @@ def get_psi(sample_info, features, formula_ok = False):
          geom = 'fcc'
      if 'bcc' in sample_info['Type']:
          geom = 'bcc'
-
-     #NEED TO ADD A ENG_C FOR BIMETALIC SYSTEMS
 
  if 'new_site' in sample_info.keys():
      if sample_info['new_site'] is None:
@@ -400,12 +365,6 @@ def get_psi(sample_info, features, formula_ok = False):
     Proportions_dict['A'] = range(5)
     Proportions_dict['B'] = range(0)
     n=7
-	
-
- #outereA= outereA_zero
- #outereB= outereB_zero
- #engA= engA_zero
- #engB= engB_zero
 
  outere_dict = {}
  eng_dict = {}
@@ -439,54 +398,6 @@ def get_psi(sample_info, features, formula_ok = False):
  geometric_mean_eng = p1_eng ** (1. / n)
 
  PSI = geometric_mean_outere_squared / geometric_mean_eng
-
- print('PSI:', PSI)
-
- """
- #new variables depending on quantity
- if Proportions_dict['A'] == 0:
-    outereA = 1
- else:
-    for i in Proportions_dict['A']:
-        outereA = outereA_zero * outereA
-        #print (outereA)
-
- if Proportions_dict['B'] == 0:
-    outereB = 1
- else:
-    for i in Proportions_dict['B']:
-        outereB = outereB_zero * outereB
-        #print (outereB)
-
- geometric_mean_outere_squared_old = ((outereA*outereB)**(1/n)) * ((outereA*outereB)**(1/n))
- #print (geometric_mean_outere_squared)
- 
- 
- #new variables depending on quantity
- if Proportions_dict['B'] == 0:
-    engA = 1
- else:
-    for i in A:
-        engA = engA_zero * engA
-        #print (engA)
-
- if B == 0:
-    engB = 1
- else:
-    for i in B:
-        engB = engB_zero * engB
-        #print (engB)
- 
- geometric_mean_eng_old = (engA*engB)**(1/n)
- #print (geometric_mean_eng)
-
-
-
- #-------------------------------------------------------------------------------------------
-
- PSI_old = geometric_mean_outere_squared_old/geometric_mean_eng_old
- #print ('PSI is equal to', (PSI))
- """
 
  return PSI
 
