@@ -22,8 +22,6 @@ def get_gcn(sample_info):
  estequiom = Type.split('_')[0]
 
  if estequiom == 'Pure':
-     #sample_info['Point_group']
-     #geom = 'fcc' #TO DO - needs to add the symmetry group in materials project to know if it's bcc or fcc
      if sample_info['Point_group'] in PGtogeom.keys():
          geom = PGtogeom[sample_info['Point_group']]
      else:
@@ -49,8 +47,6 @@ def get_gcn(sample_info):
          else:
              print('Element not available. Setting to 110...')
              surface = '110'
- #geom= 'fcc'       #options: fcc, bcc, hcp
- #site= sample_info['site'] # 'ontop'    #options: fcc, hcp, ontop, shortbridge, longbridge, threefold, hollow, bridge.
 
  if 'new_site' in sample_info.keys():
      if sample_info['new_site'] is None:
@@ -59,10 +55,6 @@ def get_gcn(sample_info):
          site = sample_info['new_site'] if '-d' not in sample_info['new_site'] else sample_info['new_site'].split('-')[0]
  else:
      site = sample_info['site'] if '-d' not in sample_info['site'] else sample_info['site'].split('-')[0]
-
- #if estequiom == 'Pure' and 'bridge' in site:
- #    site = 'bridge'
-
  
  if 'bridge' in site:
      if 'long' in site:
@@ -71,13 +63,6 @@ def get_gcn(sample_info):
          site ='shortbridge'
      else:
          site = 'bridge'
-
- #if 'longbridge' in site:
- #    site = 'longbridge'
- #elif 'shortbridge' in site:
- #    site ='shortbridge'
- #elif 'bridge' in site:
- #    site = 'bridge'
 
  if 'ontop' in site:
      site = 'ontop'
@@ -90,10 +75,7 @@ def get_gcn(sample_info):
 
  if 'threefold' in site:
      site = 'threefold'
- 
- #print(surface, geom, site)
- #DO NOT CHANGE ANYTHING BELOW THIS LINE
- #--------------------------------------------------------------------------------------------
+
 
  #FCC 111 = FCC 101 = HCP 0001
  if (surface=='111' and geom=='fcc' and site=='fcc'):
@@ -153,9 +135,6 @@ def get_gcn(sample_info):
  elif (surface=='100' and geom=='bcc' and site=='bridge'):
     GCN=1
 	
- #-------------------------------------------------------------------------------------------
-
- #print ('GCN is equal to', (GCN))
  return GCN
 
 
