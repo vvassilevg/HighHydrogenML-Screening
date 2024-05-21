@@ -9,6 +9,7 @@ Usage:
 _python Get_Dataset.py API.txt [Dataset.pickle]_
 
 API.txt must contain the API key for using Materials Project within Python scripts (See https://next-gen.materialsproject.org/api for information)
+
 Dataset.pickle is an already existing dataset file in which the user wants to append new entries for the dataset. Optional
 
 **RandomForest.py** 
