@@ -1,5 +1,5 @@
 # HighHydrogenML
-Python routines developed within the Marie Skłodowska-Curie Actions (MSCA) Postdoctoral Fellowship HighHydrogenML (grant agreement 101105610)
+Python routines developed within the Marie Skłodowska-Curie Actions (MSCA) Postdoctoral Fellowship HighHydrogenML (grant agreement 101105610) for the publication: Martínez-Alonso, C., Vassilev-Galindo, V., Comer, B. M., Abild-Pedersen, F., Winther, K. T., & LLorca, J. (2024), Catalysis Science & Technology, 14(13), 3784-3799
 
 **Get_Dataset.py**
 
